@@ -1,0 +1,28 @@
+<!-- 상단 소개글, 히어로 이미지 -->
+<div class="top">
+    <h1 class="top-heading">Hello, World!</h1>
+    <p class="top-body"></p>
+</div>
+
+<!-- 최근 게시물 -->
+<section class="articles">
+    <h3 class="articles-heading">최근 게시물</h3>
+    <ul class="article-ul">
+        <% data.forEach(post => { %>
+        <li>
+            <a href="/post/<%= post._id %>">
+                <span><%= post.title %></span>
+                <span class="article-list-date"><%= post.createdAt.toLocaleDateString() %></span>
+            </a>
+        </li>
+        <% }) %>
+    </ul>
+</section>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet" />
+<style>
+    .top-heading {
+        font-family: 'Gugi', sans-serif;
+    }
+</style>

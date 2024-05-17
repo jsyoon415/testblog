@@ -1,0 +1,114 @@
+<a href="/allPosts">&larr; 뒤로</a>
+<div class="admin-title">
+    <h2><%= locals.title %></h2>
+</div>
+<style>
+    #img-selector {
+        display: none;
+    }
+    /* #editor img {
+        max-height: 1px;
+    } */
+</style>
+<p>마크다운, mathjax, html 지원합니다.</p>
+<div class="buttons">
+    <button type="button" class="BOLD" value="B" onclick="document.execCommand('bold')">
+        <span class="material-symbols-outlined"> format_bold </span>
+    </button>
+    <button type="button" class="ITALIC" value="Italic" onclick="document.execCommand('Italic')">
+        <span class="material-symbols-outlined"> format_italic </span>
+    </button>
+    <button type="button" class="UNDERBAR" value="abc" onclick="document.execCommand('Underline')">
+        <span class="material-symbols-outlined"> format_underlined </span>
+    </button>
+    <button type="button" class="BAR" value="abc" onclick="document.execCommand('StrikeThrough')">
+        <span class="material-symbols-outlined"> format_strikethrough </span>
+    </button>
+    <button type="button" class="aignLeft" value="왼쪽 정렬" onclick="document.execCommand('justifyleft')">
+        <span class="material-symbols-outlined"> format_align_left </span>
+    </button>
+    <button type="button" class="aignCenter" value="가운데 정렬" onclick="document.execCommand('justifycenter')">
+        <span class="material-symbols-outlined"> format_align_center </span>
+    </button>
+    <button type="button" class="aignRight" value="오른쪽 정렬" onclick="document.execCommand('justifyright')">
+        <span class="material-symbols-outlined"> format_align_right </span>
+    </button>
+    <button id="btn-image">IMG</button>
+</div>
+<div>
+    <div
+        class="editorDIV"
+        contenteditable="true"
+        style="
+            border: 1px solid black;
+            padding-left: 10px;
+            background-color: #fff;
+            padding-bottom: 5px;
+            padding-top: 5px;
+        "
+        id="editor"
+    ></div>
+    <div class="editorHTMLDIV"></div>
+</div>
+<div class="buttons">
+    <button type="button" onclick="convertToEditor()">
+        <span class="material-symbols-outlined"> code_off </span></button
+    ><button type="button" onclick="convertToHTML()">
+        <span class="material-symbols-outlined"> code </span>
+    </button>
+</div>
+<input id="img-selector" type="file" accept="image/*" />
+<form action="/add" method="POST">
+    <label for="title"><b>제목</b></label>
+    <input type="text" placeholder="게시물 제목" name="title" id="title" />
+
+    <textarea placeholder="게시물 내용" name="body" cols="50" rows="10" style="display: none" id="textarea"></textarea>
+    <label for="comments">댓글 허용</label>
+    <input type="checkbox" name="comments" id="" />
+    <input type="submit" value="등록" class="btn" />
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function convertToHTML() {
+        $('.editorHTMLDIV').text($('.editorDIV').html());
+        $('.editorHTMLDIV').show();
+        $('.editorDIV').hide();
+    }
+    function convertToEditor() {
+        $('.editorDIV').html($('.editorHTMLDIV').text());
+        $('.editorDIV').show();
+        $('.editorHTMLDIV').hide();
+    }
+    const btnImage = document.getElementById('btn-image');
+    const imageSelector = document.getElementById('img-selector');
+    btnImage.addEventListener('click', function () {
+        imageSelector.click();
+    });
+
+    imageSelector.addEventListener('change', function (e) {
+        const files = e.target.files;
+        if (!!files) {
+            insertImageDate(files[0]);
+        }
+    });
+
+    function insertImageDate(file) {
+        const reader = new FileReader();
+        reader.addEventListener('load', function (e) {
+            document.execCommand('insertImage', false, `${reader.result}`);
+        });
+        reader.readAsDataURL(file);
+    }
+</script>
+<script>
+    document.getElementById('editor').addEventListener(
+        'input',
+        function () {
+            const d = $('.editorDIV').html();
+            console.log(d);
+
+            document.getElementById('textarea').value = d;
+        },
+        false
+    );
+</script>
